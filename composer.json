@@ -1,0 +1,18 @@
+{
+    "name"        : "ThijsFeryn/talks.feryn.eu",
+    "homepage"    : "http://talks.feryn.eu",
+    "authors"     : [
+        {
+            "name"  : "Thijs Feryn",
+            "email" : "thijs@feryn.eu"
+        }
+    ],
+    "require": {
+        "php"                   : ">=5.3.3",
+        "silex/silex"           : "dev-master",
+        "twig/twig"             : "1.*",
+        "symfony/twig-bridge"   : "2.1.*",
+        "symfony/config"        : "2.1.*",
+        "doctrine/dbal"         : ">=2.1,<2.3"
+    }
+}
