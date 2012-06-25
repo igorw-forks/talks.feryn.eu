@@ -18,26 +18,21 @@ $app->match('/', function() use ($app) {
     	WHERE `date`<DATE(NOW())
     	ORDER BY `date` desc';
     $pastRowSet = $app['db']->fetchAll($sql);
+
+    $curl = curl_init($app['joindin.api'].'users/'.$app['joindin.user.id'].'/talks/');
+    curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+    $joindInOut = json_decode(curl_exec($curl));
+    curl_close($curl);
+
     $past = array();
     foreach($pastRowSet as $pastTalk){
         if(isset($pastTalk['joindin'])){
-            if(($rating = apc_fetch('talks_rating_'.$pastTalk['joindin'])) === false ){
-                $curl = curl_init('https://api.joind.in/v2.1/talks/'.$pastTalk['joindin']);
-                curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
-                $joindInOut = json_decode(curl_exec($curl));
-                curl_close($curl);
-                $rating = $joindInOut->talks[0]->average_rating;
-                $talkDate = new DateTime($pastTalk['date']);
-                $nowDate = new DateTime();
-                $dateInterval = $talkDate->diff($nowDate);
-                if($dateInterval->format('h')<24){
-                    $ttl = 60;
-                }elseif($dateInterval->format('h')>=24 && $dateInterval->format('h')<48){
-                    $ttl = 3600;
-                } else {
-                    $ttl = 86400;
+            foreach($joindInOut->talks as $talk){
+                if(preg_match('/talks\/([0-9]+)$/',$talk->uri,$matches)){
+                    if($pastTalk['joindin'] == $matches[1]){
+                        $rating = $talk->average_rating;
+                    }
                 }
-                apc_store('talks_rating_'.$pastTalk['joindin'],$rating,$ttl);
             }
         } else {
             $rating = 0;
