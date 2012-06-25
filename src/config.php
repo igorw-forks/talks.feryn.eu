@@ -6,6 +6,7 @@ $app['db.config.dbname']    = 'talks';
 $app['db.config.host']      = '127.0.0.1';
 $app['db.config.user']      = 'talks';
 $app['db.config.password']  = 'talks';
+$app['db.config.charset']   = 'charset';
 
 // Debug
 $app['debug'] = true;
