@@ -5,3 +5,6 @@
 /web/assets/*
 /.idea
 /bin/talks.csv
+/config
+/config/*
+/Capfile
