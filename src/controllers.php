@@ -34,6 +34,9 @@ $app->match('/', function() use ($app) {
                     }
                 }
             }
+	    if(null == $rating){
+                $rating = 0;
+	    }
         } else {
             $rating = 0;
         }
