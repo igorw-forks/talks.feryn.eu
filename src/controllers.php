@@ -24,7 +24,7 @@ $app->match('/', function() use ($app) {
     curl_close($curl);
 
     $past = array();
-    $rating = null;
+    $rating = 0;
     foreach($pastRowSet as $pastTalk){
         if(isset($pastTalk['joindin'])){
             foreach($joindInOut->talks as $talk){
@@ -34,11 +34,6 @@ $app->match('/', function() use ($app) {
                     }
                 }
             }
-	    if(null == $rating){
-                $rating = 0;
-	    }
-        } else {
-            $rating = 0;
         }
         $pastTalk['rating'] = $rating;
         $past[] = $pastTalk;
