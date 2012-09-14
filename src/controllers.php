@@ -1,5 +1,4 @@
 <?php
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +24,7 @@ $app->match('/', function() use ($app) {
     curl_close($curl);
 
     $past = array();
+    $rating = null;
     foreach($pastRowSet as $pastTalk){
         if(isset($pastTalk['joindin'])){
             foreach($joindInOut->talks as $talk){
@@ -43,23 +43,8 @@ $app->match('/', function() use ($app) {
         $pastTalk['rating'] = $rating;
         $past[] = $pastTalk;
     }
-    return $app['twig']->render('layout.html.twig',array('upcoming'=>$upcoming, 'upcomingCount'=>count($upcoming),'past'=>$past,'pastCount'=>count($past)));
+    $output =  $app['twig']->render('layout.html.twig',array('upcoming'=>$upcoming, 'upcomingCount'=>count($upcoming),'past'=>$past,'pastCount'=>count($past)));
+    return new Response($output);
 })->bind('homepage');
-
-$app->error(function (\Exception $e, $code) use ($app) {
-    if ($app['debug']) {
-        return;
-    }
-
-    switch ($code) {
-        case 404:
-            $message = 'The requested page could not be found.';
-            break;
-        default:
-            $message = 'We are sorry, but something went terribly wrong.';
-    }
-
-    return new Response($message, $code);
-});
 
 return $app;
