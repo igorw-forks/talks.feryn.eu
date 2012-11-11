@@ -7,7 +7,7 @@ $app['db.config.driver']    = 'pdo_mysql';
 $app['db.config.dbname']    = 'talks';
 $app['db.config.host']      = '127.0.0.1';
 $app['db.config.user']      = 'talks';
-$app['db.config.password']  = 'talkspassword';
+$app['db.config.password']  = 't47kS!';
 $app['db.config.charset']   = 'utf8';
 
 // Debug

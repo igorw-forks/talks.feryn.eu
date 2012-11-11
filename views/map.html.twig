@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Thijs Feryn's past and upcoming talks on a map</title>
+        <meta name="description" content="Thijs Feryn's past and upcoming talks on a map">
+        <meta name="author" content="Thijs Feryn">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+	    <link href="css/bootstrap.css" rel="stylesheet">
+	    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="css/prettify.css" rel="stylesheet">
+    	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    	<!--[if lt IE 9]>
+      	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    	<![endif]-->
+        <style>
+            html, body {
+                width: 100%;
+            }
+            #map {
+                margin-top: 40px;
+                width: 100%;
+            }
+        </style>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />
+        <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+        <![endif]-->
+        <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
+    </head>
+    <body>
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Check out my talks !</h1>
+	        <p>Hi, my name is <a href="http://twitter.com/ThijsFeryn" target="_blank">Thijs Feryn</a> and I love public speaking. As a professional speaker in the webhosting industry, I use this site to list past and upcoming talks.</p>
+      </div>
+      <div id="map"></div>
+
+    </div> <!-- /container -->
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap-transition.js"></script>
+    <script src="/js/bootstrap-alert.js"></script>
+    <script src="/js/bootstrap-modal.js"></script>
+    <script src="/js/bootstrap-dropdown.js"></script>
+    <script src="/js/bootstrap-scrollspy.js"></script>
+    <script src="/js/bootstrap-tab.js"></script>
+    <script src="/js/bootstrap-tooltip.js"></script>
+    <script src="/js/bootstrap-popover.js"></script>
+    <script src="/js/bootstrap-button.js"></script>
+    <script src="/js/bootstrap-collapse.js"></script>
+    <script src="/js/bootstrap-carousel.js"></script>
+    <script src="/js/bootstrap-typeahead.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            $(document.getElementById("map")).height(document.documentElement.clientHeight-40);
+
+            var map = L.map('map').setView([34.827032, -40.693359], 3);
+            $.ajax({
+                url:'/geo',
+                dataType: 'json'
+            }).success(function(data){
+                        var markers = [];
+                        data.forEach(function(event){
+                            if(event.latitude != null && event.longitude !=null){
+                                var marker = L.marker([event.latitude, event.longitude],{title:event.event}).addTo(map);
+                                marker.bindPopup("<h4>"+event.name+"</h4><p>More</p>");
+                            }
+                        });
+                        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: 'Map data © OpenStreetMap contributors',
+                            maxZoom: 18
+                        }).addTo(map);
+                    });
+        });
+    </script>
+    </body>
+</html>

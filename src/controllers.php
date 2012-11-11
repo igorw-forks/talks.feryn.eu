@@ -42,4 +42,44 @@ $app->match('/', function() use ($app) {
     return new Response($output);
 })->bind('homepage');
 
+$app->match('/geo', function() use ($app){
+    $sql = 'SELECT t.title, t.date, v.name as venue, v.city, v.country, v.lat, v.long, e.name as `event`, e.url
+	    FROM talks t
+	    LEFT JOIN `events` e ON ( e.id = t.eventId )
+	    LEFT JOIN venues v ON ( v.id = e.venueId )';
+    $output = $app['db']->fetchAll($sql);
+    $events = array();
+    $curl = curl_init();
+    curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+    foreach($output as $row){
+        $event = new stdClass();
+        $event->title = $row['title'];
+        $event->date = $row['date'];
+        $event->venue = $row['venue'];
+        $event->city = $row['city'];
+        $event->country = $row['country'];
+        $event->latitude = $row['lat'];
+        $event->longitude = $row['long'];
+        if(null == $event->lat || null == $event->long){
+            curl_setopt($curl,CURLOPT_URL,"http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=".$event->venue.'+'.$event->city.'+'.$event->country);
+            $json = curl_exec($curl);
+            $geo = json_decode($json);
+            if(isset($geo->results[0]->geometry->location->lat) && isset($geo->results[0]->geometry->location->lng)){
+                $latitude = $geo->results[0]->geometry->location->lat;
+                $longitude = $geo->results[0]->geometry->location->lng;
+            }
+            $event->latitude = $latitude;
+            $event->longitude = $longitude;
+        }
+        $event->event = $row['event'];
+        $event->url = $row['urls'];
+        $events[] = $event;
+    }
+    curl_close($curl);
+    return $app->json($events);
+})->bind('geo');
+$app->match('/map', function() use ($app){
+    $output =  $app['twig']->render('map.html.twig');
+    return new Response($output);
+})->bind('map');
 return $app;
