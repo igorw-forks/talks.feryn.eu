@@ -84,7 +84,16 @@
           <tr>
               <td>{{item.date}}</td>
               {% if item.slides|length > 0 %}
-              <td><a href="{{item.slides}}" target="_blank">{{item.title}}&nbsp;<i class="icon-file"></i></a></td>
+              <td>
+				<a href="{{item.slides}}" target="_blank">{{item.title}}&nbsp;<i class="icon-file"></i></a>
+				{% if item.video|length > 0 %}
+				<a href="{{item.video}}" target="_blank"><i class="icon-facetime-video"></i></a>				
+				{% endif %}
+			  </td>
+			  {% elseif item.video|length > 0 %}			
+              <td>
+				<a href="{{item.video}}" target="_blank">{{item.title}}&nbsp;<i class="icon-facetime-video"></i></a>
+			  </td>			
               {% else %}
               <td>{{item.title}}</td>
               {% endif %}

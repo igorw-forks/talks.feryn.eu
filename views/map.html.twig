@@ -63,10 +63,14 @@
                 dataType: 'json'
             }).success(function(data){
                         var markers = [];
-                        data.forEach(function(event){
-                            if(event.latitude != null && event.longitude !=null){
-                                var marker = L.marker([event.latitude, event.longitude],{title:event.event}).addTo(map);
-                                marker.bindPopup("<h4>"+event.name+"</h4><p>More</p>");
+                        data.forEach(function(venue){
+                            if(venue.latitude != null && venue.longitude !=null){
+                                var marker = L.marker([venue.latitude, venue.longitude],{title:venue.name+' @ '+venue.city+', '+venue.country}).addTo(map);
+                                var content = '';
+                                venue.talks.forEach(function(talk){
+                                    content+= "<li>"+talk.date+": <strong>"+talk.title+"</strong> <em><a href='"+talk.eventUrl+"' target='_blank'>("+talk.event+")</a></em></li>";
+                                });
+                                marker.bindPopup("<h4>"+venue.name+" @ "+venue.city+", "+venue.country+"</h4><ul>"+content+"</ul>");
                             }
                         });
                         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
