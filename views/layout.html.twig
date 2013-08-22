@@ -36,7 +36,7 @@
 	<p>Hi, my name is <a href="http://twitter.com/ThijsFeryn" target="_blank">Thijs Feryn</a> and I love public speaking. As a professional speaker in the webhosting industry, I use this site to list past and upcoming talks.</p>
       </div>
       <div class="page-header">
-          <h1>Upcoming talks <small>I currently have <strong>{{upcomingCount}}</strong> upcoming talks</small></h1>
+          <h1>Upcoming talks <small>I currently have <strong>{{upcomingCount}}</strong> upcoming talk{{upcomingCount != 1 ? 's' : ''}}</small></h1>
       </div>
       <table class="table table-bordered table-condensed">
           <thead>
@@ -81,7 +81,7 @@
 	  </tbody>
       </table>
       <div class="page-header">
-          <h1>Past talks <small>I've already done <strong>{{pastCount}}</strong> talks</small></h1>
+          <h1>Past talks <small>I've already done <strong>{{pastCount}}</strong> talk{{pastCount != 1 ? 's' : ''}}</small></h1>
       </div>
         <table class="table table-bordered table-condensed">
             <thead>
